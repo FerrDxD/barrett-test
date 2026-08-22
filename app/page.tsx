@@ -27,10 +27,10 @@ export default function LandingPage() {
       <div className="absolute top-1/3 right-1/4 w-20 h-20 bg-amber-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-bounce duration-3000"></div>
       
       {/* Decorative Rotating Border Behind Card */}
-      <div className="absolute w-[500px] h-[500px] bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 rounded-full filter blur-[120px] opacity-10 animate-spin pointer-events-none"></div>
+      <div className="absolute w-64 h-64 sm:w-[500px] sm:h-[500px] bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 rounded-full filter blur-[120px] opacity-10 animate-spin pointer-events-none"></div>
 
       {/* Card Wrapper */}
-      <div className="max-w-xl w-full bg-white/90 backdrop-blur-md rounded-3xl shadow-[0_20px_50px_rgba(99,102,241,0.12)] border border-white p-6 md:p-8 relative z-10 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(99,102,241,0.18)]">
+      <div className="w-full max-w-xl bg-white/90 backdrop-blur-md rounded-3xl shadow-[0_20px_50px_rgba(99,102,241,0.12)] border border-white p-6 md:p-8 relative z-10 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(99,102,241,0.18)] overflow-hidden">
         
         {/* Confetti-like Sparkle Icon */}
         <div className="absolute top-6 right-6 text-amber-500 animate-bounce">
@@ -43,7 +43,7 @@ export default function LandingPage() {
             <BrainCircuit className="w-9 h-9" />
           </div>
           <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
-            Halo Calon Pemimpin! <span className="inline-block animate-bounce">🚀</span>
+            Halo Calon Pemimpin! <span className="inline-block animate-pulse">🚀</span>
           </h1>
           <p className="text-slate-500 text-xs md:text-sm font-semibold uppercase tracking-widest mt-2 bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full border border-indigo-100/50 inline-block">
             Navasena Psychometric Journey 🌟
@@ -51,7 +51,7 @@ export default function LandingPage() {
         </div>
 
         {/* FUN INFO GRID CARDS */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 mb-8">
           <div className="p-3.5 bg-indigo-50/50 border border-indigo-100 rounded-2xl text-center group hover:bg-indigo-50 transition-colors shadow-sm">
             <div className="text-lg mb-1">🧠</div>
             <h4 className="text-[10px] font-black text-indigo-700 uppercase tracking-wide">Kenali Diri</h4>

@@ -8,9 +8,9 @@ export default function SuccessPage() {
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-slate-50 to-pink-50 p-4 relative overflow-hidden select-none font-sans">
       
       {/* Dynamic Celebratory Confetti & Balloons background */}
-      <div className="absolute top-10 left-10 text-pink-300 opacity-20 animate-bounce duration-3000"><Sparkles className="w-10 h-10" /></div>
-      <div className="absolute bottom-20 right-10 text-indigo-300 opacity-25 animate-bounce duration-5000"><Sparkles className="w-12 h-12" /></div>
-      <div className="absolute top-1/4 right-20 text-yellow-300 opacity-20 animate-pulse"><Award className="w-14 h-14" /></div>
+      <div className="absolute top-10 left-4 sm:left-10 text-pink-300 opacity-20 animate-bounce duration-3000"><Sparkles className="w-10 h-10" /></div>
+      <div className="absolute bottom-20 right-4 sm:right-10 text-indigo-300 opacity-25 animate-bounce duration-5000"><Sparkles className="w-12 h-12" /></div>
+      <div className="absolute top-1/4 right-8 sm:right-20 text-yellow-300 opacity-20 animate-pulse"><Award className="w-14 h-14" /></div>
       
       <div className="absolute top-0 left-0 w-36 h-36 bg-pink-300 rounded-full blur-3xl opacity-20 mix-blend-multiply"></div>
       <div className="absolute bottom-0 right-0 w-36 h-36 bg-indigo-300 rounded-full blur-3xl opacity-20 mix-blend-multiply"></div>
@@ -25,7 +25,7 @@ export default function SuccessPage() {
             <div className="relative">
               <div className="absolute inset-0 bg-emerald-200 rounded-full animate-ping opacity-25"></div>
               <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center border-2 border-emerald-200 text-emerald-500 relative z-10 shadow-lg shadow-emerald-500/10">
-                <CheckCircle2 className="w-12 h-12 animate-pulse" />
+                <CheckCircle2 className="w-12 h-12" />
               </div>
             </div>
           </div>

@@ -504,7 +504,7 @@ export default function AdminDashboard() {
             </div>
             <div>
               <h2 className="font-extrabold text-slate-900 text-base tracking-tight flex items-center gap-1.5">
-                NAVASENA <span className="text-[10px] font-bold tracking-widest px-1.5 py-0.5 bg-indigo-55 bg-indigo-50 text-indigo-600 rounded-full border border-indigo-100">PRO</span>
+                NAVASENA <span className="text-[10px] font-bold tracking-widest px-1.5 py-0.5 bg-indigo-50 text-indigo-600 rounded-full border border-indigo-100">PRO</span>
               </h2>
               <p className="text-slate-500 text-xs font-semibold">Analisis Psikometri OSIS</p>
             </div>
@@ -636,7 +636,7 @@ export default function AdminDashboard() {
                   </div>
                   <div>
                     <div className="flex items-center gap-1.5">
-                      <p className={`font-bold text-sm tracking-tight transition-colors truncate max-w-[130px] ${
+                      <p className={`font-bold text-sm tracking-tight transition-colors truncate max-w-[140px] ${
                         isSelected ? 'text-white' : 'text-slate-800 group-hover:text-indigo-600'
                       }`}>
                         {c.name}
@@ -644,7 +644,7 @@ export default function AdminDashboard() {
                     </div>
                     <div className="flex items-center gap-2 mt-0.5">
                       <span className={`text-[10px] font-black ${isSelected ? 'text-indigo-200' : 'text-slate-400'}`}>{c.student_class}</span>
-                      <span className={`text-[8px] font-extrabold uppercase px-1.5 py-0.2 rounded border ${
+                      <span className={`text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded border ${
                         isSelected ? 'bg-indigo-500/20 text-white border-indigo-400/20' : 'bg-slate-50 text-slate-500 border-slate-200/80'
                       }`}>
                         Ready: {c.analysis.healthScore}
@@ -669,7 +669,7 @@ export default function AdminDashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col md:flex-row gap-6 font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col md:flex-row gap-0 overflow-x-hidden font-sans">
       
       {/* ============================================================
           DESKTOP SIDEBAR (Visible only on md screens and up)
@@ -702,7 +702,7 @@ export default function AdminDashboard() {
         
         {/* Top Sticky Navbar */}
         <div className="bg-white/80 border-b border-slate-200 px-4 md:px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sticky top-0 backdrop-blur-md z-20 shadow-sm">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0">
             {/* Mobile Drawer Trigger Button */}
             <button
               onClick={() => setIsMobileSidebarOpen(true)}
@@ -711,14 +711,14 @@ export default function AdminDashboard() {
               <Menu className="w-5 h-5" />
             </button>
             
-            <div>
-              <h1 className="text-lg md:text-xl font-black bg-gradient-to-r from-slate-950 via-slate-800 to-indigo-700 bg-clip-text text-transparent">
+            <div className="min-w-0 flex-1">
+              <h1 className="text-lg md:text-xl font-black bg-gradient-to-r from-slate-950 via-slate-800 to-indigo-700 bg-clip-text text-transparent truncate">
                 {activeTab === "overview" && "Dashboard Analisis Komparatif OSIS"}
                 {activeTab === "report" && `Laporan Profil Psikologis: ${activeCandidate?.name || ""}`}
                 {activeTab === "compare" && "Kamera Komparasi Kandidat"}
                 {activeTab === "guide" && "Panduan Interpretasi Barrett Model"}
               </h1>
-              <p className="text-slate-500 text-[10px] md:text-xs font-semibold mt-0.5">
+              <p className="text-slate-500 text-[10px] md:text-xs font-semibold mt-0.5 truncate">
                 {activeTab === "overview" && "Hasil Pengukuran Karakteristik Kolektif & Tren Pendaftaran"}
                 {activeTab === "report" && `Detail Profil Barrett 7 Tingkat Kesadaran Kelas ${activeCandidate?.student_class || ""}`}
                 {activeTab === "compare" && "Bandingkan Nilai Karakteristik Dua Kandidat Berdampingan"}
@@ -728,7 +728,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Tab Navigation Menu */}
-          <div className="flex bg-slate-100 border border-slate-200 p-1 rounded-xl text-[11px] font-bold gap-0.5 self-start sm:self-center overflow-x-auto max-w-full no-scrollbar">
+          <div className="flex bg-slate-100 border border-slate-200 p-1 rounded-xl text-[11px] font-bold gap-0.5 self-start sm:self-center overflow-x-auto max-w-full min-w-0 no-scrollbar">
             <button 
               onClick={() => setActiveTab("overview")}
               className={`px-3 py-1.5 rounded-lg flex items-center gap-1 shrink-0 transition-all ${
@@ -967,10 +967,10 @@ export default function AdminDashboard() {
                       globalStats.topPositive.map((item, idx) => (
                         <div key={idx} className="flex items-center justify-between p-3 bg-white border border-indigo-100/30 shadow-sm rounded-xl">
                           <span className="font-bold text-xs md:text-sm text-slate-800 flex items-center gap-2">
-                            <span className="w-5 h-5 rounded-md bg-indigo-5 border border-indigo-100 text-indigo-600 text-[10px] font-black flex items-center justify-center">{idx+1}</span>
+                            <span className="w-5 h-5 rounded-md bg-indigo-50 border border-indigo-100 text-indigo-600 text-[10px] font-black flex items-center justify-center">{idx+1}</span>
                             {item.word}
                           </span>
-                          <span className="text-[9px] font-black text-indigo-600 uppercase tracking-widest px-2 py-0.5 bg-indigo-5 border border-indigo-100 rounded-md">
+                          <span className="text-[9px] font-black text-indigo-600 uppercase tracking-widest px-2 py-0.5 bg-indigo-50 border border-indigo-100 rounded-md">
                             Dipilih {item.count} Kali
                           </span>
                         </div>
@@ -995,10 +995,10 @@ export default function AdminDashboard() {
                       globalStats.topLimiting.map((item, idx) => (
                         <div key={idx} className="flex items-center justify-between p-3 bg-white border border-rose-100/30 shadow-sm rounded-xl">
                           <span className="font-bold text-xs md:text-sm text-slate-800 flex items-center gap-2">
-                            <span className="w-5 h-5 rounded-md bg-rose-5 border border-rose-100 text-rose-600 text-[10px] font-black flex items-center justify-center">{idx+1}</span>
+                            <span className="w-5 h-5 rounded-md bg-rose-50 border border-rose-100 text-rose-600 text-[10px] font-black flex items-center justify-center">{idx+1}</span>
                             {item.word}
                           </span>
-                          <span className="text-[9px] font-black text-rose-600 uppercase tracking-widest px-2 py-0.5 bg-rose-5 border border-rose-100 rounded-md">
+                          <span className="text-[9px] font-black text-rose-600 uppercase tracking-widest px-2 py-0.5 bg-rose-50 border border-rose-100 rounded-md">
                             Terasa {item.count} Kali
                           </span>
                         </div>
@@ -1021,14 +1021,14 @@ export default function AdminDashboard() {
               {/* GLASSMORPHIC KANDIDAT HEADER */}
               <div className="bg-white p-5 md:p-8 rounded-3xl border border-slate-200/70 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-indigo-50 rounded-full blur-3xl opacity-50 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"></div>
-                <div className="flex items-center gap-4 relative z-10">
-                  <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white text-2xl md:text-3xl font-black shadow-lg shadow-indigo-600/10">
+                <div className="flex items-center gap-4 relative z-10 min-w-0 flex-1">
+                  <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white text-2xl md:text-3xl font-black shadow-lg shadow-indigo-600/10 shrink-0">
                     {activeCandidate.name.charAt(0).toUpperCase()}
                   </div>
-                  <div>
-                    <h2 className="text-xl md:text-3xl font-black text-slate-900 tracking-tight leading-tight">{activeCandidate.name}</h2>
+                  <div className="min-w-0 flex-1">
+                    <h2 className="text-xl md:text-3xl font-black text-slate-900 tracking-tight leading-tight truncate">{activeCandidate.name}</h2>
                     <div className="flex flex-wrap items-center gap-2 mt-1.5">
-                      <span className="px-2.5 py-0.5 bg-indigo-5 text-indigo-600 text-[10px] font-black rounded-lg border border-indigo-100">{activeCandidate.student_class}</span>
+                      <span className="px-2.5 py-0.5 bg-indigo-50 text-indigo-600 text-[10px] font-black rounded-lg border border-indigo-100">{activeCandidate.student_class}</span>
                       <span className="text-slate-500 text-[10px] md:text-xs font-semibold flex items-center gap-1">
                         <Calendar className="w-3.5 h-3.5" /> {new Date(activeCandidate.created_at).toLocaleDateString("id-ID", { day: '2-digit', month: 'short' })}
                       </span>
@@ -1060,7 +1060,7 @@ export default function AdminDashboard() {
                 
                 {/* 1. Indeks Kesiapan Mental */}
                 <div className="bg-white p-5 rounded-3xl border border-slate-200/70 shadow-sm flex flex-col justify-between min-h-[280px] relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-5 rounded-full blur-3xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-full blur-3xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
                   <div>
                     <h3 className="text-xs md:text-sm font-bold text-slate-900 mb-1.5 tracking-wide uppercase">Indeks Kesiapan Mental</h3>
                     <p className="text-slate-500 text-[11px] md:text-xs leading-relaxed font-semibold">
@@ -1228,7 +1228,7 @@ export default function AdminDashboard() {
                                 return <span className="text-[10px] text-slate-400 font-semibold italic">Tidak ada kata terpilih di level ini</span>;
                               }
                               return words.map((w, idx) => (
-                                <span key={idx} className="text-[10px] font-bold px-2 py-0.5 bg-indigo-5 border border-indigo-100 text-indigo-600 rounded-md">
+                                <span key={idx} className="text-[10px] font-bold px-2 py-0.5 bg-indigo-50 border border-indigo-100 text-indigo-600 rounded-md">
                                   {w}
                                 </span>
                               ));
@@ -1445,12 +1445,12 @@ export default function AdminDashboard() {
                     
                     {/* Candidate A Card */}
                     <div className="bg-white p-5 md:p-6 rounded-3xl border border-indigo-100 shadow-sm space-y-6 relative overflow-hidden">
-                      <div className="absolute top-0 right-0 -mt-20 -mr-20 w-40 h-40 bg-indigo-55 bg-indigo-50 rounded-full blur-3xl"></div>
+                      <div className="absolute top-0 right-0 -mt-20 -mr-20 w-40 h-40 bg-indigo-50 rounded-full blur-3xl"></div>
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 text-lg font-black shrink-0">A</div>
                         <div>
                           <h3 className="text-base md:text-lg font-black text-slate-900 truncate max-w-[200px] sm:max-w-[250px]">{candidateAData.name}</h3>
-                          <span className="px-2.5 py-0.5 bg-indigo-5 text-indigo-600 text-[10px] font-black rounded border border-indigo-100">{candidateAData.student_class}</span>
+                          <span className="px-2.5 py-0.5 bg-indigo-50 text-indigo-600 text-[10px] font-black rounded border border-indigo-100">{candidateAData.student_class}</span>
                         </div>
                       </div>
 
@@ -1473,7 +1473,7 @@ export default function AdminDashboard() {
                         <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Kekuatan Utama:</p>
                         <div className="flex flex-wrap gap-1.5">
                           {candidateAData.analysis.topValues.map((w, idx) => (
-                            <span key={idx} className="text-[10px] font-bold px-2 py-0.5 bg-indigo-5 border border-indigo-100 text-indigo-600 rounded-md">{w}</span>
+                            <span key={idx} className="text-[10px] font-bold px-2 py-0.5 bg-indigo-50 border border-indigo-100 text-indigo-600 rounded-md">{w}</span>
                           ))}
                         </div>
                       </div>
@@ -1486,7 +1486,7 @@ export default function AdminDashboard() {
                         <div className="w-12 h-12 bg-rose-50 border border-rose-100 rounded-xl flex items-center justify-center text-rose-600 text-lg font-black shrink-0">B</div>
                         <div>
                           <h3 className="text-base md:text-lg font-black text-slate-900 truncate max-w-[200px] sm:max-w-[250px]">{candidateBData.name}</h3>
-                          <span className="px-2.5 py-0.5 bg-rose-5 text-rose-600 text-[10px] font-black rounded border border-rose-100">{candidateBData.student_class}</span>
+                          <span className="px-2.5 py-0.5 bg-rose-50 text-rose-600 text-[10px] font-black rounded border border-rose-100">{candidateBData.student_class}</span>
                         </div>
                       </div>
 
@@ -1509,7 +1509,7 @@ export default function AdminDashboard() {
                         <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Kekuatan Utama:</p>
                         <div className="flex flex-wrap gap-1.5">
                           {candidateBData.analysis.topValues.map((w, idx) => (
-                            <span key={idx} className="text-[10px] font-bold px-2 py-0.5 bg-rose-5 border border-rose-100 text-rose-600 rounded-md">{w}</span>
+                            <span key={idx} className="text-[10px] font-bold px-2 py-0.5 bg-rose-50 border border-rose-100 text-rose-600 rounded-md">{w}</span>
                           ))}
                         </div>
                       </div>
