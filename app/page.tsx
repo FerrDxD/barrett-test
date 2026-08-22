@@ -46,7 +46,7 @@ export default function LandingPage() {
             Halo Calon Pemimpin! <span className="inline-block animate-pulse">🚀</span>
           </h1>
           <p className="text-slate-500 text-xs md:text-sm font-semibold uppercase tracking-widest mt-2 bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full border border-indigo-100/50 inline-block">
-            Navasena Psychometric Journey 🌟
+            Nawasena Psychometric Journey 🌟
           </p>
         </div>
 
