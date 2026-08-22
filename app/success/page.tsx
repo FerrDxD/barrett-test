@@ -38,7 +38,7 @@ export default function SuccessPage() {
           </p>
           
           <p className="text-slate-500 text-xs md:text-sm mb-8 leading-relaxed font-semibold">
-            Terima kasih banyak telah berpartisipasi! Sidik jari karakter kepemimpinan unikmu telah sukses direkam dan siap untuk dianalisis oleh panitia penilai seleksi OSIS Navasena. Semoga beruntung! 🌟
+            Terima kasih banyak telah berpartisipasi! Sidik jari karakter kepemimpinan unikmu telah sukses direkam dan siap untuk dianalisis oleh panitia penilai seleksi OSIS Nawasena. Semoga beruntung! 🌟
           </p>
           
           <Link 
