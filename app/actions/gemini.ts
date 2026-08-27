@@ -4,9 +4,15 @@ import { GoogleGenAI } from "@google/genai";
 
 export async function generateInterviewQuestions(candidateData: any) {
   try {
-    const ai = new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY,
-    });
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return { 
+        success: false, 
+        error: "API Key Gemini tidak ditemukan. Harap pastikan GEMINI_API_KEY sudah diatur di file .env.local dan restart server Anda." 
+      };
+    }
+    
+    const ai = new GoogleGenAI({ apiKey });
     
     const prompt = `
       Anda adalah seorang recruiter profesional yang akan mewawancarai kandidat pengurus OSIS.
@@ -37,7 +43,7 @@ export async function generateInterviewQuestions(candidateData: any) {
     `;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-3.1-pro-preview',
+      model: 'gemini-2.5-flash',
       contents: prompt,
     });
     
