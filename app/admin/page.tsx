@@ -343,20 +343,26 @@ export default function AdminDashboard() {
 
   // Recruiter Interview Guide (Tailored Questions based on Limiting Values)
   const [aiQuestions, setAiQuestions] = useState<any[]>([]);
+  const [aiError, setAiError] = useState<string | null>(null);
   const [isGeneratingQuestions, setIsGeneratingQuestions] = useState(false);
 
   // Fungsi untuk meng-generate pertanyaan wawancara
   const generateQuestions = async () => {
     if (!activeCandidate) return;
     setIsGeneratingQuestions(true);
+    setAiError(null);
     try {
       // Panggil server action (diimport di atas)
       const generated = await generateInterviewQuestions(activeCandidate);
-      if (generated && generated.length > 0) {
-        setAiQuestions(generated);
+      if (generated?.success) {
+        setAiQuestions(generated.data || []);
+      } else if (generated?.error) {
+        setAiError(generated.error);
+        setAiQuestions([]);
       }
     } catch (error) {
       console.error("Gagal generate pertanyaan", error);
+      setAiError("Gagal menghubungi server.");
     } finally {
       setIsGeneratingQuestions(false);
     }
@@ -366,6 +372,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (activeCandidate && activeTab === "report") {
       setAiQuestions([]); // Reset questions
+      setAiError(null);
       generateQuestions();
     }
   }, [activeCandidate, activeTab]);
@@ -1273,6 +1280,12 @@ export default function AdminDashboard() {
                     <div className="flex items-center justify-center py-10">
                       <RefreshCw className="w-8 h-8 text-indigo-400 animate-spin" />
                       <span className="ml-3 text-sm font-semibold text-slate-500">AI sedang meracik pertanyaan...</span>
+                    </div>
+                  ) : aiError ? (
+                    <div className="flex flex-col items-center justify-center py-8 px-4 bg-rose-50 rounded-2xl border border-rose-100 text-center">
+                      <AlertTriangle className="w-8 h-8 text-rose-500 mb-3" />
+                      <p className="text-sm font-bold text-rose-700">{aiError}</p>
+                      <p className="text-xs text-rose-600 mt-1">Silakan atasi masalah ini dan klik tombol Reroll.</p>
                     </div>
                   ) : interviewQuestions.length === 0 ? (
                     <div className="text-center py-6 text-sm text-slate-500">Belum ada pertanyaan. Silakan klik tombol Reroll.</div>

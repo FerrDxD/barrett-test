@@ -2,12 +2,12 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-});
-
 export async function generateInterviewQuestions(candidateData: any) {
   try {
+    const ai = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY,
+    });
+    
     const prompt = `
       Anda adalah seorang recruiter profesional yang akan mewawancarai kandidat pengurus OSIS.
       Berikut adalah data hasil tes kandidat:
@@ -37,7 +37,7 @@ export async function generateInterviewQuestions(candidateData: any) {
     `;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-pro',
+      model: 'gemini-3.1-pro-preview',
       contents: prompt,
     });
     
@@ -45,9 +45,18 @@ export async function generateInterviewQuestions(candidateData: any) {
     // Bersihkan dari markdown block jika ada
     text = text.replace(/```json/g, "").replace(/```/g, "").trim();
 
-    return JSON.parse(text);
-  } catch (error) {
+    return { success: true, data: JSON.parse(text) };
+  } catch (error: any) {
     console.error("Gagal menghasilkan pertanyaan:", error);
-    return [];
+    let errorMessage = "Terjadi kesalahan yang tidak diketahui saat menghasilkan pertanyaan.";
+    
+    // Check if it's a 429 rate limit error
+    if (error?.status === 429 || error?.message?.includes('429') || error?.message?.includes('exceeded your current quota')) {
+      errorMessage = "Limit API Gemini Anda sudah habis (Quota Exceeded). Silakan ganti API Key atau coba lagi nanti.";
+    } else if (error?.message) {
+      errorMessage = error.message;
+    }
+    
+    return { success: false, error: errorMessage };
   }
 }
