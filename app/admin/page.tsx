@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import { supabase } from "../../lib/supabase";
 import { WORDS, Category } from "../../lib/word";
 import { getBarrettAnalysis } from "../../lib/interpreter";
+import { generateInterviewQuestions } from "../actions/gemini";
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
@@ -341,150 +342,39 @@ export default function AdminDashboard() {
   }, [candidateAData, candidateBData]);
 
   // Recruiter Interview Guide (Tailored Questions based on Limiting Values)
-  const interviewQuestions = useMemo(() => {
-    if (!activeCandidate) return [];
-    const limiting = activeCandidate.analysis.limitingWords;
-    const questionsList: { word: string; category: string; question: string; lookFor: string }[] = [];
+  const [aiQuestions, setAiQuestions] = useState<any[]>([]);
+  const [isGeneratingQuestions, setIsGeneratingQuestions] = useState(false);
 
-    const questionsDict: Record<string, { q: string; lf: string; cat: string }> = {
-      "Tertekan": {
-        q: "Bagaimana Anda menyeimbangkan tuntutan akademis sekolah dengan tanggung jawab besar yang ada di OSIS secara sehat?",
-        lf: "Kemampuan manajemen prioritas, ketahanan stres, dan kemauan mencari bantuan bila diperlukan.",
-        cat: "Tekanan"
-      },
-      "Tegang": {
-        q: "Ceritakan situasi saat dinamika kelompok dalam rapat kepanitiaan berjalan kaku atau menegangkan. Bagaimana Anda mencairkannya?",
-        lf: "Kecerdasan emosional, diplomasi, dan kemampuan meredakan konflik interpersonal.",
-        cat: "Tekanan"
-      },
-      "Berat": {
-        q: "Bila diberikan tanggung jawab program kerja yang berskala besar, bagaimana langkah Anda memilahnya menjadi tindakan yang realistis?",
-        lf: "Pendekatan logis dan analitis terhadap perencanaan taktis, tidak panik menghadapi tantangan besar.",
-        cat: "Tekanan"
-      },
-      "Terbebani": {
-        q: "Jika Anda merasa terbebani dengan tugas kepengurusan, apakah Anda bersedia mendelegasikan tugas atau cenderung menanggungnya sendiri?",
-        lf: "Sifat kolaboratif, kemampuan bersandar pada tim, pemahaman atas pentingnya delegasi terarah.",
-        cat: "Tekanan"
-      },
-      "Lelah": {
-        q: "Kelelahan fisik dan mental sering melanda pengurus OSIS di tengah masa bakti. Bagaimana cara Anda menjaga komitmen dan motivasi saat energi Anda berada di titik terendah?",
-        lf: "Kesadaran diri (self-awareness) untuk memulihkan energi dan ketangguhan komitmen jangka panjang.",
-        cat: "Tekanan"
-      },
-      "Muak": {
-        q: "Ketika menghadapi sikap apatis dari siswa lain atau penolakan administratif dari pihak sekolah, bagaimana cara Anda menjaga antusiasme dan tidak lekas jenuh?",
-        lf: "Resilience mental, ketegaran visi kepemimpinan, dan kontrol dorongan frustrasi.",
-        cat: "Tekanan"
-      },
-      "Panik": {
-        q: "Bila di tengah acara hari-H terjadi kendala teknis krusial, apa langkah pertama yang Anda ambil untuk menenangkan diri dan mengarahkan panitia lainnya?",
-        lf: "Ketenangan di bawah tekanan, inisiatif problem solving cepat, serta ketegasan instruksi darurat.",
-        cat: "Tekanan"
-      },
-      "Bimbang": {
-        q: "Ketika Anda menghadapi perdebatan sengit tentang konsep acara yang terpecah menjadi dua opini kuat, bagaimana Anda mengambil keputusan yang tegas dan objektif?",
-        lf: "Metode pengambilan keputusan berbasis data, ketegasan memimpin, serta keluwesan kompromi.",
-        cat: "Tekanan"
-      },
-      "Rentan": {
-        q: "Dalam area kepemimpinan apa Anda merasa paling membutuhkan bimbingan atau dukungan dari pengurus OSIS lain untuk melengkapi kelemahan Anda?",
-        lf: "Kerendahan hati untuk belajar, keterbukaan diri, dan kecocokan bekerja dalam kolaborasi kelompok.",
-        cat: "Tekanan"
-      },
-      "Cemas": {
-        q: "Bagaimana cara Anda meredam kecemasan akan kegagalan sebuah program kerja agar tidak menghambat kreativitas Anda saat merancang ide awal?",
-        lf: "Mengubah cemas menjadi mitigasi risiko terencana, pemikiran antisipatif yang strategis.",
-        cat: "Kecemasan"
-      },
-      "Takut": {
-        q: "Ceritakan saat di mana Anda harus mengemukakan usulan yang tidak populer kepada rekan sebaya demi kebaikan bersama meskipun ada rasa takut akan penolakan.",
-        lf: "Integritas nilai moral, keberanian berbicara (speak up), dan komunikasi asertif yang sopan.",
-        cat: "Kecemasan"
-      },
-      "Gugup": {
-        q: "Bagaimana cara Anda menstabilkan diri saat harus melakukan presentasi besar atau memimpin forum siswa di depan ratusan pasang mata?",
-        lf: "Teknik pengendalian kecemasan panggung (stage fright) dan kesiapan persiapan mental personal.",
-        cat: "Kecemasan"
-      },
-      "Khawatir": {
-        q: "Ketika terjadi kesalahpahaman informasi di grup koordinasi, bagaimana Anda menyaring kekhawatiran pribadi agar tidak memperkeruh situasi di tim?",
-        lf: "Objektivitas, kemampuan menenangkan keresahan kelompok, serta klarifikasi berbasis fakta.",
-        cat: "Kecemasan"
-      },
-      "Segan": {
-        q: "Bagaimana Anda akan menyampaikan ide kritis yang bertentangan dengan kebijakan senior atau Pembina OSIS secara sopan namun tetap jelas?",
-        lf: "Asertivitas profesional, adab berkomunikasi dengan otoritas senior, serta keyakinan berargumen.",
-        cat: "Kecemasan"
-      },
-      "Malu": {
-        q: "Sebagai perwakilan OSIS, Anda akan berhadapan dengan beragam latar belakang siswa. Bagaimana cara Anda merangkul siswa yang paling pasif atau tertutup agar merasa dihargai?",
-        lf: "Kemampuan interaksi inklusif, inisiatif menyapa terlebih dahulu, dan kehangatan personal.",
-        cat: "Kecemasan"
-      },
-      "Waswas": {
-        q: "Bagaimana Anda memastikan kepastian atas kesiapan setiap pos kepanitiaan sehingga tidak diliputi rasa khawatir/was-was saat acara berlangsung?",
-        lf: "Penerapan sistem checklist kontrol ketat dan kebiasaan melakukan koordinasi berkala.",
-        cat: "Kecemasan"
-      },
-      "Pesimis": {
-        q: "Jika target partisipan program kerja Anda gagal dicapai di tengah jalan, bagaimana langkah Anda membalikkan keputusasaan panitia lain menjadi semangat bangkit?",
-        lf: "Kepemimpinan transformasional, optimisme logis, dan kemampuan merekayasa ulang rencana alternatif.",
-        cat: "Kecemasan"
-      },
-      "Terancam": {
-        q: "Bagaimana Anda memisahkan masukan kritis yang bersifat keras terhadap program kerja Anda agar tidak dianggap sebagai serangan pribadi terhadap harga diri Anda?",
-        lf: "Kedewasaan menyikapi kritik (maturity), objektivitas berorganisasi, dan ego terkendali.",
-        cat: "Kecemasan"
+  // Fungsi untuk meng-generate pertanyaan wawancara
+  const generateQuestions = async () => {
+    if (!activeCandidate) return;
+    setIsGeneratingQuestions(true);
+    try {
+      // Panggil server action (diimport di atas)
+      const generated = await generateInterviewQuestions(activeCandidate);
+      if (generated && generated.length > 0) {
+        setAiQuestions(generated);
       }
-    };
-
-    limiting.forEach(word => {
-      if (questionsDict[word]) {
-        questionsList.push({
-          word,
-          category: questionsDict[word].cat,
-          question: questionsDict[word].q,
-          lookFor: questionsDict[word].lf
-        });
-      }
-    });
-
-    if (questionsList.length === 0) {
-      if (activeCandidate.analysis.topValues.includes("Fokus") || activeCandidate.analysis.topValues.includes("Objektif")) {
-        questionsList.push({
-          word: "Fokus / Objektif",
-          category: "Analisis Positif",
-          question: "Kandidat memiliki fokus & ketelitian luar biasa. Bagaimana Anda menjaga agar ketelitian pada detail teknis ini tidak membuat Anda abai terhadap gambaran besar (big picture) visi OSIS?",
-          lookFor: "Keseimbangan antara visi strategis jangka panjang dengan eksekusi operasional yang presisi."
-        });
-      }
-      if (activeCandidate.analysis.topValues.includes("Berani") || activeCandidate.analysis.topValues.includes("Ambisi")) {
-        questionsList.push({
-          word: "Berani / Ambisi",
-          category: "Analisis Positif",
-          question: "Karakter Anda sangat didorong oleh keberanian mengambil risiko dan dorongan maju. Bagaimana Anda menyelaraskan keputusan berisiko tinggi dengan kepatuhan etis aturan sekolah?",
-          lookFor: "Manajemen risiko terukur, kepatuhan struktural, dan kebijaksanaan kepemimpinan."
-        });
-      }
-      if (activeCandidate.analysis.topValues.includes("Empati") || activeCandidate.analysis.topValues.includes("Peduli")) {
-        questionsList.push({
-          word: "Empati / Peduli",
-          category: "Analisis Positif",
-          question: "Anda menonjol dalam empati dan kepedulian antarsesama. Bagaimana Anda mempertahankan ketegasan organisasi saat harus mengevaluasi rekan panitia terdekat yang melakukan kelalaian kerja?",
-          lookFor: "Ketegasan objektif yang dibalut kebaikan interpersonal (firm yet compassionate leadership)."
-        });
-      }
-      questionsList.push({
-        word: "Profil Mental Stabil",
-        category: "Kesiapan Umum",
-        question: "Berdasarkan hasil tes, kesiapan mental Anda tergolong sangat kokoh tanpa hambatan psikologis internal yang signifikan. Apa visi perubahan terbesar yang ingin Anda letakkan sebagai pondasi kepengurusan OSIS?",
-        lookFor: "Visi orisinal yang berorientasi kemajuan, antusiasme nyata, dan keselarasan idealisme personal."
-      });
+    } catch (error) {
+      console.error("Gagal generate pertanyaan", error);
+    } finally {
+      setIsGeneratingQuestions(false);
     }
+  };
 
-    return questionsList;
-  }, [activeCandidate]);
+  // Auto-generate saat kandidat berubah
+  useEffect(() => {
+    if (activeCandidate && activeTab === "report") {
+      setAiQuestions([]); // Reset questions
+      generateQuestions();
+    }
+  }, [activeCandidate, activeTab]);
+
+  const interviewQuestions = useMemo(() => {
+    if (aiQuestions.length > 0) return aiQuestions;
+    return [];
+  }, [aiQuestions]);
+
 
   const handleSelectCandidate = (candidate: Candidate) => {
     setSelectedCandidate(candidate);
@@ -1353,43 +1243,60 @@ export default function AdminDashboard() {
               </div>
 
               {/* AI RECRUITER'S INTERVIEW TOOLKIT */}
-              <div className="bg-gradient-to-br from-indigo-50/50 via-white to-violet-50/50 border border-indigo-100 p-5 md:p-8 rounded-3xl relative overflow-hidden group shadow-sm">
-                <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-indigo-50 rounded-full blur-3xl pointer-events-none"></div>
-                
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
-                    <Lightbulb className="w-5 h-5 animate-pulse" />
+              <div className="bg-slate-100 p-6 md:p-8 rounded-[2rem] border border-slate-200">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
+                      <Lightbulb className="w-5 h-5 animate-pulse" />
+                    </div>
+                    <div>
+                      <h3 className="text-xs md:text-base font-black text-slate-900 uppercase tracking-wide">Recruiter's Interview Toolkit</h3>
+                      <p className="text-[10px] md:text-[11px] text-indigo-600 font-bold uppercase mt-0.5">Panduan Pertanyaan Wawancara Adaptif Navasena (AI Generated)</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-xs md:text-base font-black text-slate-900 uppercase tracking-wide">Recruiter's Interview Toolkit</h3>
-                    <p className="text-[10px] md:text-[11px] text-indigo-600 font-bold uppercase mt-0.5">Panduan Pertanyaan Wawancara Adaptif Navasena</p>
-                  </div>
+                  <button 
+                    onClick={generateQuestions} 
+                    disabled={isGeneratingQuestions}
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold rounded-xl transition-colors shadow-sm"
+                  >
+                    <RefreshCw className={`w-4 h-4 ${isGeneratingQuestions ? 'animate-spin' : ''}`} />
+                    {isGeneratingQuestions ? 'Generating...' : 'Reroll Questions'}
+                  </button>
                 </div>
 
                 <p className="text-xs text-slate-500 leading-relaxed mb-6 font-semibold">
-                  Sistem mendeteksi <span className="text-indigo-600 font-bold">{activeCandidate.analysis.limitingWords.length} kata pembatas</span> dari pilihan kandidat. Gunakan daftar pertanyaan perilaku adaptif di bawah ini saat wawancara mendalam untuk mengklarifikasi kematangan mental kandidat:
+                  Sistem mendeteksi <span className="text-indigo-600 font-bold">{activeCandidate.analysis.limitingWords.length} kata pembatas</span> dan meng-generate pertanyaan yang relevan menggunakan AI. Gunakan daftar pertanyaan perilaku adaptif di bawah ini saat wawancara mendalam untuk mengklarifikasi kematangan mental kandidat:
                 </p>
 
                 <div className="space-y-4">
-                  {interviewQuestions.map((q, idx) => (
-                    <div key={idx} className="bg-white p-4 md:p-5 rounded-2xl border border-slate-200/80 hover:border-indigo-200 transition-colors shadow-sm space-y-3">
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest px-2.5 py-1 bg-indigo-50 border border-indigo-100 rounded-md">
-                          Indikator: {q.word} ({q.category})
-                        </span>
-                        <span className="text-[10px] text-slate-400 font-bold">PERTANYAAN {idx+1}</span>
-                      </div>
-                      
-                      <h4 className="font-extrabold text-sm text-slate-800 leading-relaxed border-l-2 border-indigo-600 pl-3">
-                        "{q.question}"
-                      </h4>
-
-                      <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-[11px] leading-relaxed">
-                        <strong className="text-emerald-600 font-bold uppercase tracking-wider block mb-1">Panduan Jawaban Ideal:</strong>
-                        <span className="text-slate-500 font-semibold">{q.lookFor}</span>
-                      </div>
+                  {isGeneratingQuestions && interviewQuestions.length === 0 ? (
+                    <div className="flex items-center justify-center py-10">
+                      <RefreshCw className="w-8 h-8 text-indigo-400 animate-spin" />
+                      <span className="ml-3 text-sm font-semibold text-slate-500">AI sedang meracik pertanyaan...</span>
                     </div>
-                  ))}
+                  ) : interviewQuestions.length === 0 ? (
+                    <div className="text-center py-6 text-sm text-slate-500">Belum ada pertanyaan. Silakan klik tombol Reroll.</div>
+                  ) : (
+                    interviewQuestions.map((q, idx) => (
+                      <div key={idx} className="bg-white p-4 md:p-5 rounded-2xl border border-slate-200/80 hover:border-indigo-200 transition-colors shadow-sm space-y-3">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest px-2.5 py-1 bg-indigo-50 border border-indigo-100 rounded-md">
+                            Indikator: {q.word} ({q.category})
+                          </span>
+                          <span className="text-[10px] text-slate-400 font-bold">PERTANYAAN {idx+1}</span>
+                        </div>
+                        
+                        <h4 className="font-extrabold text-sm text-slate-800 leading-relaxed border-l-2 border-indigo-600 pl-3">
+                          "{q.question}"
+                        </h4>
+
+                        <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-[11px] leading-relaxed">
+                          <strong className="text-emerald-600 font-bold uppercase tracking-wider block mb-1">Panduan Jawaban Ideal:</strong>
+                          <span className="text-slate-500 font-semibold">{q.lookFor}</span>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
 
