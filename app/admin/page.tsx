@@ -401,7 +401,7 @@ export default function AdminDashboard() {
             </div>
             <div>
               <h2 className="font-extrabold text-slate-900 text-base tracking-tight flex items-center gap-1.5">
-                NAVASENA <span className="text-[10px] font-bold tracking-widest px-1.5 py-0.5 bg-indigo-50 text-indigo-600 rounded-full border border-indigo-100">PRO</span>
+                NAWASENA <span className="text-[10px] font-bold tracking-widest px-1.5 py-0.5 bg-indigo-50 text-indigo-600 rounded-full border border-indigo-100">PRO</span>
               </h2>
               <p className="text-slate-500 text-xs font-semibold">Analisis Psikometri OSIS</p>
             </div>
@@ -1258,7 +1258,7 @@ export default function AdminDashboard() {
                     </div>
                     <div>
                       <h3 className="text-xs md:text-base font-black text-slate-900 uppercase tracking-wide">Recruiter's Interview Toolkit</h3>
-                      <p className="text-[10px] md:text-[11px] text-indigo-600 font-bold uppercase mt-0.5">Panduan Pertanyaan Wawancara Adaptif Navasena (AI Generated)</p>
+                      <p className="text-[10px] md:text-[11px] text-indigo-600 font-bold uppercase mt-0.5">Panduan Pertanyaan Wawancara Adaptif Nawasena (AI Generated)</p>
                     </div>
                   </div>
                   <button 
