@@ -26,16 +26,20 @@ export async function generateInterviewQuestions(candidateData: any) {
       Indikator Hambatan / Titik Lemah: ${candidateData.analysis.limitingWords.join(", ")}
       
       Tugas Anda:
-      Buatlah 4 pertanyaan wawancara adaptif yang relevan dan berkorelasi langsung dengan indikator kekuatan (Karakteristik Dominan) dan hambatan (Indikator Hambatan / Titik Lemah) kandidat ini.
-      Fokus pada area hambatan untuk menguji bagaimana mereka mengatasi tekanan atau kecemasan, dan pada kekuatan untuk menguji bagaimana mereka memanfaatkannya dengan baik dalam organisasi (OSIS).
+      Buatlah 4 pertanyaan wawancara adaptif tingkat HOTS (Higher Order Thinking Skills) untuk memancing critical thinking dari kandidat, menguji kekuatan, dan mengevaluasi bagaimana kandidat mengelola hambatan mereka dalam situasi nyata di OSIS.
+
+      ATURAN PENTING:
+      1. SINGKAT & TO THE POINT: Pertanyaan harus lugas, langsung pada intinya, dan tidak bertele-tele (maksimal 1-2 kalimat).
+      2. IMPLISIT: JANGAN menyebutkan indikator kekuatan atau hambatan secara eksplisit di dalam pertanyaan. (Misal: JANGAN katakan "Karena Anda mudah cemas..." atau "Sebagai pribadi yang mudah bangkit...", melainkan ciptakan skenario dilema atau konflik yang secara alami akan memicu/menguji karakter tersebut).
+      3. CRITICAL THINKING: Gunakan pertanyaan situasional atau studi kasus yang memaksa kandidat menganalisis, mengambil keputusan yang sulit, dan memberikan solusi yang taktis.
       
       Format output wajib berupa array of objects dalam format JSON (tanpa format markdown tambahan). Contoh:
       [
         {
-          "word": "Kata kunci terkait (misal: Tertekan / Fokus)",
-          "category": "Kategori terkait (misal: Tekanan / Analisis Positif)",
-          "question": "Pertanyaan wawancara di sini...",
-          "lookFor": "Hal yang perlu diperhatikan dari jawaban kandidat..."
+          "word": "Kata kunci (Karakter/Hambatan yang diuji)",
+          "category": "Kekuatan / Hambatan",
+          "question": "Pertanyaan wawancara di sini (Singkat, Implisit, HOTS)...",
+          "lookFor": "Indikator pemikiran kritis dan sikap dari jawaban kandidat yang perlu diperhatikan..."
         }
       ]
       
